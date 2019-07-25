@@ -23,9 +23,9 @@ class AlbumController {
             let data = try Data(contentsOf: jsonURL)
             let decoder = JSONDecoder()
             let output = try decoder.decode(Song.self, from: data)
-            let output2 = try decoder.decode(Album.self, from: data)
+            //let output2 = try decoder.decode(Album.self, from: data)
             print(output)
-            print(output2)
+            //print(output2)
             completion(nil)
         } catch {
             print("error: \(error) in decoding")

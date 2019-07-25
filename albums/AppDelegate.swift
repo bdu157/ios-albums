@@ -16,6 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let albumController = AlbumController()
+        albumController.testDecodingExampleAlbum { (error) in
+            if let error = error {
+                NSLog("there is an error: \(error) in decoding")
+                return
+            }
+        }
         return true
     }
 
