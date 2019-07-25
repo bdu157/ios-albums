@@ -99,7 +99,13 @@ class AlbumDetailTableViewController: UITableViewController {
     @IBAction func saveButtonTapped(_ sender: Any) {
         albumController.testDecodingExampleAlbum { (error) in
             if let error = error {
-                NSLog("there is an error: \(error)")
+                NSLog("there is an error: \(error) in decoding")
+                return
+            }
+        }
+        albumController.testEncodingExampleAlbum { (error) in
+            if let error = error {
+                NSLog("there is an error: \(error) in encoding")
                 return
             }
         }

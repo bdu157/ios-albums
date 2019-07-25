@@ -6,7 +6,7 @@
 //  Copyright © 2019 Dongwoo Pae. All rights reserved.
 //
 import Foundation
-struct Album: Decodable {
+struct Album: Codable {
     
     enum AlbumKey: String, CodingKey {
         case name
@@ -22,8 +22,8 @@ struct Album: Decodable {
     }
     var name: String
     var artist: String
-    var genres: String
-    var coverArt: String
+    var genres: [String]
+    var coverArt: [String]
     var id: String
     var songs: [Song]
     
@@ -34,55 +34,40 @@ struct Album: Decodable {
         //artist
         self.artist = try container.decode(String.self, forKey: .artist)
         //genres
-        var genresContainer = try container.nestedUnkeyedContainer(forKey: .genres)
-        self.genres = try genresContainer.decode(String.self)
+        //var genresContainer = try container.nestedUnkeyedContainer(forKey: .genres)
+        self.genres = try container.decode([String].self, forKey: .genres)
         //coverArt
-        var coverArtDescription = try container.nestedUnkeyedContainer(forKey: .coverArt)
-        let coverArtContainer = try coverArtDescription.nestedContainer(keyedBy: AlbumKey.CoverArtKey.self)
-        self.coverArt = try coverArtContainer.decode(String.self, forKey: .url)
+        var coverArtArrayContainer = try container.nestedUnkeyedContainer(forKey: .coverArt)
+        let coverArtContainer = try coverArtArrayContainer.nestedContainer(keyedBy: AlbumKey.CoverArtKey.self)
+        let coverArt = try coverArtContainer.decode(String.self, forKey: .url)
+        self.coverArt = [coverArt]
         //id
         self.id = try container.decode(String.self, forKey: .id)
         //songs
-        self.songs = try container.decode([Song].self, forKey: .songs)   //(?) - why would this work as well?
-//        var songsContainer = try container.nestedUnkeyedContainer(forKey: .songs)
-//        var songss: [Song] = []
-//        while songsContainer.isAtEnd == false {
-//            let oneSong = try songsContainer.decode(Song.self)
-//            songss.append(oneSong)
-//        }
-//        self.songs = songss
+//     self.songs = try container.decode([Song].self, forKey: .songs)   //(?) - why would this work as well?
+        var songsContainer = try container.nestedUnkeyedContainer(forKey: .songs)
+        var songss: [Song] = []
+        while songsContainer.isAtEnd == false {
+            let oneSong = try songsContainer.decode(Song.self)
+            songss.append(oneSong)
         }
-}
-
-struct Song: Decodable {    //song needs to be treated as one and when you use songs within album above you create an array of songs that were decoded below
-    enum SongKey: String, CodingKey {
-        case songDuration = "duration"
-        case songName = "name"
-        case id
-        
-            enum durationKey: String, CodingKey {
-                case duration
-            }
-            
-            enum nameKey: String, CodingKey {
-                case title
-            }
-    }
-    var songDuration: String
-    var songName: String
-    var id: String
+        self.songs = songss
+        }
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: SongKey.self)
-        //songDuration
-        let songDurationContainer = try container.nestedContainer(keyedBy: SongKey.durationKey.self, forKey: .songDuration)
-        let duration = try songDurationContainer.decode(String.self, forKey: .duration)
-        self.songDuration = duration
-        //songName
-        let songNameContainer = try container.nestedContainer(keyedBy: SongKey.nameKey.self, forKey: .songName)
-        let title = try songNameContainer.decode(String.self, forKey: .title)
-        self.songName = title
+    func encode(with encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: AlbumKey.self)
+        try container.encode(self.name, forKey: .name)
+        try container.encode(self.artist, forKey: .artist)
+        try container.encode(self.genres, forKey: .genres)
+        //coverArt
+        var coverArtArrayContainer = container.nestedUnkeyedContainer(forKey: .coverArt)
+        var coverArtContainer = coverArtArrayContainer.nestedContainer(keyedBy: AlbumKey.CoverArtKey.self)
+        try coverArtContainer.encode(self.coverArt, forKey: .url)
+        
         //id
-        self.id = try container.decode(String.self, forKey: .id)
+        try container.encode(self.id, forKey: .id)
+        
+        //songs (?) this simple?
+        try container.encode(self.songs, forKey: .songs)
     }
 }
