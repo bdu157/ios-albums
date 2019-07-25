@@ -10,6 +10,8 @@ import UIKit
 
 class AlbumDetailTableViewController: UITableViewController {
 
+    var albumController = AlbumController()
+    
     //MARK : Outlets
     @IBOutlet weak var albumNameTextField: UITextField!
     @IBOutlet weak var artistTextField: UITextField!
@@ -95,7 +97,11 @@ class AlbumDetailTableViewController: UITableViewController {
     */
 
     @IBAction func saveButtonTapped(_ sender: Any) {
-        
-        
+        albumController.testDecodingExampleAlbum { (error) in
+            if let error = error {
+                NSLog("there is an error: \(error)")
+                return
+            }
+        }
     }
 }
