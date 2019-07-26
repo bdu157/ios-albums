@@ -40,21 +40,15 @@ struct Song: Codable {    //song needs to be treated as one and when you use son
         self.id = try container.decode(String.self, forKey: .id)
     }
     
-    func encode(with encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: SongKey.self)
         //songDuration
-        
-        var songContainer1 =  container.nestedContainer(keyedBy: SongKey.durationKey.self, forKey: .duration)
-        var songDurationContainer = songContainer1.nestedContainer(keyedBy: SongKey.durationKey.self, forKey: .duration)
-        try songDurationContainer.encode(self.duration, forKey: .duration)
+        var songContainer =  container.nestedContainer(keyedBy: SongKey.durationKey.self, forKey: .duration)
+        try songContainer.encode(self.duration, forKey: .duration)
         //songName
-        
-        var songContainer2 = container.nestedContainer(keyedBy: SongKey.nameKey.self, forKey: .name)
-        var songNameContainer = songContainer2.nestedContainer(keyedBy: SongKey.nameKey.self, forKey: .title)
+        var songNameContainer = container.nestedContainer(keyedBy: SongKey.nameKey.self, forKey: .name)
         try songNameContainer.encode(self.name, forKey: .title)
-        
         //id
         try container.encode(self.id, forKey: .id)
-        
     }
 }

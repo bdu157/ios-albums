@@ -6,6 +6,7 @@
 //  Copyright © 2019 Dongwoo Pae. All rights reserved.
 //
 import Foundation
+
 struct Album: Codable {
     
     enum AlbumKey: String, CodingKey {
@@ -54,7 +55,7 @@ struct Album: Codable {
         self.songs = songss
         }
     
-    func encode(with encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: AlbumKey.self)
         try container.encode(self.name, forKey: .name)
         try container.encode(self.artist, forKey: .artist)
@@ -62,12 +63,15 @@ struct Album: Codable {
         //coverArt
         var coverArtArrayContainer = container.nestedUnkeyedContainer(forKey: .coverArt)
         var coverArtContainer = coverArtArrayContainer.nestedContainer(keyedBy: AlbumKey.CoverArtKey.self)
-        try coverArtContainer.encode(self.coverArt, forKey: .url)
+        for coverArt in self.coverArt {
+            try coverArtContainer.encode(coverArt, forKey: .url)
+        }
         
         //id
         try container.encode(self.id, forKey: .id)
         
-        //songs (?) this simple?
+        //songs
         try container.encode(self.songs, forKey: .songs)
+        
     }
 }
