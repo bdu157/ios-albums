@@ -45,14 +45,14 @@ struct Album: Codable {
         //id
         self.id = try container.decode(String.self, forKey: .id)
         //songs
-//     self.songs = try container.decode([Song].self, forKey: .songs)   //(?) - why would this work as well?
-        var songsContainer = try container.nestedUnkeyedContainer(forKey: .songs)
-        var songss: [Song] = []
-        while songsContainer.isAtEnd == false {
-            let oneSong = try songsContainer.decode(Song.self)
-            songss.append(oneSong)
-        }
-        self.songs = songss
+        self.songs = try container.decode([Song].self, forKey: .songs)   //(?) - why would this work as well?
+//        var songsContainer = try container.nestedUnkeyedContainer(forKey: .songs)
+//        var songss: [Song] = []
+//        while songsContainer.isAtEnd == false {
+//            let oneSong = try songsContainer.decode(Song.self)
+//            songss.append(oneSong)
+//        }
+//        self.songs = songss
         }
     
     func encode(to encoder: Encoder) throws {
