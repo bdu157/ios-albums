@@ -18,8 +18,6 @@ class AlbumsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()

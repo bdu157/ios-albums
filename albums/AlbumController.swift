@@ -145,19 +145,22 @@ class AlbumController {
     }
     
     func update(for album: Album, nameTo name: String, artistTo artist: String, genresTo genres: [String], coverArtTo coverArt: [String], songsTo songs: [Song]) {
-        guard let index = self.album.firstIndex(of: album) else {return}
-        var updatingAlbum = self.album[index]
-            updatingAlbum.name = name
-            updatingAlbum.artist = artist
-            updatingAlbum.genres = genres
-            updatingAlbum.coverArt = coverArt
-            updatingAlbum.songs = songs
+        guard let location = self.album.firstIndex(of: album) else {return}
+        //var updatingAlbum = self.album[index]
+            self.album[location].name = name
+            self.album[location].artist = artist
+            self.album[location].genres = genres
+            self.album[location].coverArt = coverArt
+            self.album[location].songs = songs
     
-            self.put(album: updatingAlbum) { (error) in
+        
+        if album.songs != [] {
+            self.put(album: album) { (error) in
                 if let error = error {
                     print(error)
                     return
                 }
             }
         }
+    }
 }
