@@ -14,6 +14,7 @@ struct Album: Codable, Equatable {
         return (lhs.name == rhs.name &&
             lhs.artist == rhs.artist &&
             lhs.genres == rhs.genres &&
+            lhs.coverArt == rhs.coverArt &&
             lhs.id == rhs.id &&
             lhs.songs == rhs.songs)
     }

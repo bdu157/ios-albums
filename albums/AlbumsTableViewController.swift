@@ -13,8 +13,16 @@ class AlbumsTableViewController: UITableViewController {
 
     var albumController = AlbumController()
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         self.albumController.getAlbums { (error) in
             if let error = error {
                 print(error)
@@ -24,10 +32,6 @@ class AlbumsTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
 
     // MARK: - Table view data source
@@ -60,7 +64,15 @@ class AlbumsTableViewController: UITableViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
- 
+        if segue.identifier == "ToAlbumDetailVCFromAdd" {
+            guard let destVC = segue.destination as? AlbumDetailTableViewController else {return}
+            destVC.albumController = self.albumController
+        } else if segue.identifier == "ToAlbumDetailVCFromCell" {
+            guard let destVC = segue.destination as? AlbumDetailTableViewController,
+            let selectedRow = self.tableView.indexPathForSelectedRow else {return}
+            destVC.albumController = self.albumController
+            destVC.album = self.albumController.album[selectedRow.row]
+        }
     }
 
 }

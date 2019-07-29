@@ -126,13 +126,15 @@ class AlbumController {
         }.resume()
     }
     
-    func createAlbum(name: String, artist: String, genres: [String], coverArt: [String]) {
-        let createdAlbum = Album(name: name, artist: artist, genres: genres, coverArt: coverArt)
+    func createAlbum(name: String, artist: String, genres: [String], coverArt: [String], songs: [Song]) {
+        let createdAlbum = Album(name: name, artist: artist, genres: genres, coverArt: coverArt, songs: songs)
         self.album.append(createdAlbum)
-        self.put(album: createdAlbum) { (error) in
-            if let error = error {
-                print(error)
-                return
+        if createdAlbum.songs != [] {
+            put(album: createdAlbum) { (error) in
+                if let error = error {
+                    print(error)
+                    return
+                }
             }
         }
     }
@@ -142,23 +144,20 @@ class AlbumController {
         return createdSong
     }
     
-    func update(for album: Album) {
-        let index = self.album.firstIndex(of: album)
-        guard let indexNumber = index else {return}
-        var updatingAlbum = self.album[indexNumber]
-        
-        if album != album {
-                updatingAlbum.artist = album.artist
-                updatingAlbum.coverArt = album.coverArt
-                updatingAlbum.genres = album.genres
-                updatingAlbum.name = album.name
-                updatingAlbum.songs = album.songs
-            self.put(album: album) { (error) in
+    func update(for album: Album, nameTo name: String, artistTo artist: String, genresTo genres: [String], coverArtTo coverArt: [String], songsTo songs: [Song]) {
+        guard let index = self.album.firstIndex(of: album) else {return}
+        var updatingAlbum = self.album[index]
+            updatingAlbum.name = name
+            updatingAlbum.artist = artist
+            updatingAlbum.genres = genres
+            updatingAlbum.coverArt = coverArt
+            updatingAlbum.songs = songs
+    
+            self.put(album: updatingAlbum) { (error) in
                 if let error = error {
                     print(error)
                     return
                 }
             }
         }
-    }
 }
