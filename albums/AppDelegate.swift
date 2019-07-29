@@ -24,8 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
         }
-        
-        
+
         albumController.testEncodingExampleAlbum { (error) in
             if let error = error {
                 NSLog("there is an error: \(error) in encoding")

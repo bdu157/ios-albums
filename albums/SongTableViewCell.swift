@@ -25,9 +25,6 @@ class SongTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    
     @IBAction func addSongButtonTapped(_ sender: Any) {
-        
-        
     }
 }

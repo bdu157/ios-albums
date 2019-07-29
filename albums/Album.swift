@@ -7,7 +7,22 @@
 //
 import Foundation
 
-struct Album: Codable {
+struct Album: Codable, Equatable {
+
+    
+    static func == (lhs: Album, rhs: Album) -> Bool {
+        return (lhs.name == rhs.name &&
+            lhs.artist == rhs.artist &&
+            lhs.genres == rhs.genres &&
+            lhs.id == rhs.id &&
+            lhs.songs == rhs.songs)
+    }
+    
+    
+    static func != (lhs: Album, rhs: Album) -> Bool {
+        return !(rhs == lhs)
+    }
+
     
     enum AlbumKey: String, CodingKey {
         case name
@@ -21,6 +36,16 @@ struct Album: Codable {
             case url
         }
     }
+
+    init(name: String, artist: String, genres: [String], coverArt:[String], id: String = UUID().uuidString, songs: [Song] = []) {
+        self.name = name
+        self.artist = artist
+        self.genres = genres
+        self.coverArt = coverArt
+        self.id = id
+        self.songs = songs
+    }
+    
     var name: String
     var artist: String
     var genres: [String]

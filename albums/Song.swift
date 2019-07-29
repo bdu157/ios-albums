@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Song: Codable {    //song needs to be treated as one and when you use songs within album above you create an array of songs that were decoded below
+struct Song: Codable, Equatable {    //song needs to be treated as one and when you use songs within album above you create an array of songs that were decoded below
     enum SongKey: String, CodingKey {
         case duration
         case name
@@ -22,6 +22,13 @@ struct Song: Codable {    //song needs to be treated as one and when you use son
             case title
         }
     }
+    
+    init(duration:String, name: String, id: String = UUID().uuidString) {
+        self.duration = duration
+        self.name = name
+        self.id = id
+    }
+    
     var duration: String
     var name: String
     var id: String
